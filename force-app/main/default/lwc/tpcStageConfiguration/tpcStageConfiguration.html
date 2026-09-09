@@ -1,0 +1,128 @@
+<template>
+    <div class="stage-config">
+        <lightning-card title="Stage Tracking" icon-name="standard:settings">
+
+            <lightning-button
+                slot="actions"
+                variant="neutral"
+                label="Generate tracking fields"
+                icon-name="utility:add"
+                disabled={isLoading}
+                onclick={handleGenerateFields}>
+            </lightning-button>
+
+            <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+
+                <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_medium">
+                    Pick a picklist value to measure. Stage Tracking records when each
+                    record enters and leaves that value, how long the most recent visit
+                    lasted, and the total across every visit.
+                </p>
+
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <lightning-combobox
+                            label="Object"
+                            placeholder="Select an object"
+                            value={objectApi}
+                            options={objectOptions}
+                            onchange={handleObjectChange}
+                            required>
+                        </lightning-combobox>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <lightning-combobox
+                            label="Picklist field"
+                            placeholder="Select a field"
+                            value={fieldApi}
+                            options={fieldOptions}
+                            disabled={isFieldDisabled}
+                            onchange={handleFieldChange}
+                            required>
+                        </lightning-combobox>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <lightning-combobox
+                            label="Picklist value"
+                            placeholder="Select a value"
+                            value={stageValue}
+                            options={valueOptions}
+                            disabled={isValueDisabled}
+                            onchange={handleValueChange}
+                            required>
+                        </lightning-combobox>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-gutters slds-m-top_small">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <lightning-input
+                            type="checkbox"
+                            label="Active"
+                            field-level-help="Tracking runs for this value only while Active is checked."
+                            checked={active}
+                            onchange={handleActiveChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <lightning-input
+                            type="checkbox"
+                            label="Auto create tracking fields"
+                            field-level-help="Include this value the next time tracking fields are generated."
+                            checked={autoCreate}
+                            onchange={handleAutoCreateChange}>
+                        </lightning-input>
+                    </div>
+                </div>
+
+                <div class="button-row slds-m-top_medium">
+                    <lightning-button
+                        variant="brand"
+                        label={saveLabel}
+                        disabled={isSaveDisabled}
+                        onclick={handleSave}>
+                    </lightning-button>
+
+                    <lightning-button
+                        variant="neutral"
+                        label="Reset"
+                        disabled={isLoading}
+                        onclick={handleReset}>
+                    </lightning-button>
+                </div>
+            </div>
+        </lightning-card>
+
+        <lightning-card title="Tracked values" icon-name="standard:record">
+            <template lwc:if={hasConfigurations}>
+                <div class="table-scroll">
+                    <lightning-datatable
+                        key-field="id"
+                        data={configurations}
+                        columns={columns}
+                        draft-values={draftValues}
+                        onsave={handleInlineSave}
+                        onrowaction={handleRowAction}
+                        hide-checkbox-column>
+                    </lightning-datatable>
+                </div>
+            </template>
+
+            <template lwc:else>
+                <div class="empty-state">
+                    <p class="slds-text-heading_small">Nothing tracked yet</p>
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                        Choose an object, field and value above to start tracking.
+                    </p>
+                </div>
+            </template>
+        </lightning-card>
+
+        <template lwc:if={isLoading}>
+            <lightning-spinner alternative-text="Working" size="medium"></lightning-spinner>
+        </template>
+    </div>
+</template>

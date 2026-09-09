@@ -1,0 +1,14 @@
+# Never deploy these
+**/jsconfig.json
+**/.eslintrc.json
+**/.eslintrc.js
+
+package.json
+jest.config.js
+node_modules
+coverage
+
+**/__tests__/**
+
+# Jest scaffolding lives under force-app but is not package metadata
+force-app/test/**

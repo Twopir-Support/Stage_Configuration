@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  lwc-tests:
+    name: LWC unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm test
+
+  apex-tests:
+    name: Apex tests in a scratch org
+    runs-on: ubuntu-latest
+    # Needs DEVHUB_SFDX_URL: the output of
+    #   sf org display --target-org <devhub> --verbose --json
+    # taken from result.sfdxAuthUrl, stored as a repository secret.
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the Salesforce CLI
+        run: npm install --global @salesforce/cli
+
+      - name: Authenticate the Dev Hub
+        run: |
+          echo "${{ secrets.DEVHUB_SFDX_URL }}" > /tmp/sfdx-url.txt
+          sf org login sfdx-url --sfdx-url-file /tmp/sfdx-url.txt --set-default-dev-hub --alias devhub
+
+      - name: Create a scratch org
+        run: sf org create scratch -f config/project-scratch-def.json -a ci --duration-days 1 --set-default --wait 20
+
+      - name: Deploy
+        run: sf project deploy start --target-org ci --wait 30
+
+      - name: Run Apex tests
+        run: sf apex run test --target-org ci --test-level RunLocalTests --code-coverage --result-format human --wait 30
+
+      - name: Delete the scratch org
+        if: always()
+        run: sf org delete scratch --target-org ci --no-prompt

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Suppresses stage tracking for the assigned user. Intended for data-load and integration users so a bulk import does not rewrite stage history.</description>
+    <isLicensed>false</isLicensed>
+    <label>Bypass Stage Tracking</label>
+</CustomPermission>
