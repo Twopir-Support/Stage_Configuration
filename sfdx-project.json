@@ -1,0 +1,17 @@
+{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true,
+      "package": "TPC Stage Tracking",
+      "versionName": "Beta 1",
+      "versionNumber": "0.1.0.NEXT",
+      "versionDescription": "Configurable stage duration tracking for any picklist field."
+    }
+  ],
+  "name": "tpc-stage-tracking",
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "62.0",
+  "packageAliases": {}
+}

@@ -1,0 +1,14 @@
+.sf/
+.sfdx/
+.localdevserver/
+deploy-options.json
+
+node_modules/
+npm-debug.log
+.eslintcache
+coverage/
+
+.idea/
+.vscode/
+*.iml
+.DS_Store

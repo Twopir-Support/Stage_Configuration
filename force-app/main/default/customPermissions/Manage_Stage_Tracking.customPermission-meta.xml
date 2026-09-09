@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Required to open the Stage Tracking setup component and to create, edit or delete stage configuration.</description>
+    <isLicensed>false</isLicensed>
+    <label>Manage Stage Tracking</label>
+</CustomPermission>
